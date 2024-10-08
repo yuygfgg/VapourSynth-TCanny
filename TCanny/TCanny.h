@@ -12,7 +12,7 @@
 #include <VapourSynth4.h>
 #include <VSHelper4.h>
 
-#ifdef TCANNY_X86
+#if defined(TCANNY_X86) || defined (__ARM_NEON__)
 #include "VCL2/vectormath_trig.h"
 #endif
 

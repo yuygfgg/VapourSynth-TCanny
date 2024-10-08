@@ -28,10 +28,12 @@
 
 using namespace std::literals;
 
-#ifdef TCANNY_X86
+#if defined(TCANNY_X86) || defined (__ARM_NEON__)
 template<typename pixel_t> extern void filter_sse2(const VSFrame* src, VSFrame* dst, const TCannyData* const VS_RESTRICT d, const VSAPI* vsapi) noexcept;
+#ifdef TCANNY_X86
 template<typename pixel_t> extern void filter_avx2(const VSFrame* src, VSFrame* dst, const TCannyData* const VS_RESTRICT d, const VSAPI* vsapi) noexcept;
 template<typename pixel_t> extern void filter_avx512(const VSFrame* src, VSFrame* dst, const TCannyData* const VS_RESTRICT d, const VSAPI* vsapi) noexcept;
+#endif
 #endif
 
 static auto gaussianWeights(const float sigma, int& radius) noexcept {
@@ -595,6 +597,14 @@ static void VS_CC tcannyCreate(const VSMap* in, VSMap* out, [[maybe_unused]] voi
                 d->alignment = 16;
             }
 #endif
+#ifdef __ARM_NEON__
+            // const auto iset{ instrset_detect() };
+            const auto iset = 6;
+            if ((opt == 0 && iset >= 2) || opt == 2) {
+                vectorSize = 4;
+                d->alignment = 16;
+            }
+#endif
 
             if (d->vi->format.bytesPerSample == 1) {
                 d->filter = filter_c<uint8_t>;
@@ -605,6 +615,10 @@ static void VS_CC tcannyCreate(const VSMap* in, VSMap* out, [[maybe_unused]] voi
                 else if ((opt == 0 && iset >= 8) || opt == 3)
                     d->filter = filter_avx2<uint8_t>;
                 else if ((opt == 0 && iset >= 2) || opt == 2)
+                    d->filter = filter_sse2<uint8_t>;
+#endif
+#ifdef __ARM_NEON__
+                if ((opt == 0 && iset >= 2) || opt == 2)
                     d->filter = filter_sse2<uint8_t>;
 #endif
             } else if (d->vi->format.bytesPerSample == 2) {
@@ -618,6 +632,10 @@ static void VS_CC tcannyCreate(const VSMap* in, VSMap* out, [[maybe_unused]] voi
                 else if ((opt == 0 && iset >= 2) || opt == 2)
                     d->filter = filter_sse2<uint16_t>;
 #endif
+#ifdef __ARM_NEON__
+                if ((opt == 0 && iset >= 2) || opt == 2)
+                    d->filter = filter_sse2<uint16_t>;
+#endif
             } else {
                 d->filter = filter_c<float>;
 
@@ -627,6 +645,10 @@ static void VS_CC tcannyCreate(const VSMap* in, VSMap* out, [[maybe_unused]] voi
                 else if ((opt == 0 && iset >= 8) || opt == 3)
                     d->filter = filter_avx2<float>;
                 else if ((opt == 0 && iset >= 2) || opt == 2)
+                    d->filter = filter_sse2<float>;
+#endif
+#ifdef __ARM_NEON__
+                if ((opt == 0 && iset >= 2) || opt == 2)
                     d->filter = filter_sse2<float>;
 #endif
             }
