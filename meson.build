@@ -25,6 +25,30 @@ sources = [
   'TCanny/TCanny.cpp',
   'TCanny/TCanny.h'
 ]
+sources += [
+    'TCanny/TCanny_SSE2.cpp',
+    'TCanny/VCL2/instrset.h',
+    'TCanny/VCL2/instrset_detect.cpp',
+    'TCanny/VCL2/vector_convert.h',
+    'TCanny/VCL2/vectorclass.h',
+    'TCanny/VCL2/vectorf128.h',
+    'TCanny/VCL2/vectorf256.h',
+    'TCanny/VCL2/vectorf256e.h',
+    'TCanny/VCL2/vectorf512.h',
+    'TCanny/VCL2/vectorf512e.h',
+    'TCanny/VCL2/vectori128.h',
+    'TCanny/VCL2/vectori256.h',
+    'TCanny/VCL2/vectori256e.h',
+    'TCanny/VCL2/vectori512.h',
+    'TCanny/VCL2/vectori512e.h',
+    'TCanny/VCL2/vectori512s.h',
+    'TCanny/VCL2/vectori512se.h',
+    'TCanny/VCL2/vectormath_common.h',
+    'TCanny/VCL2/vectormath_exp.h',
+    'TCanny/VCL2/vectormath_hyp.h',
+    'TCanny/VCL2/vectormath_lib.h',
+    'TCanny/VCL2/vectormath_trig.h'
+  ]
 
 libs = []
 
