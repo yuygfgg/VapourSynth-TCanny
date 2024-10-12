@@ -293,12 +293,11 @@ static inline void cpuid(int output[4], int functionnumber, int ecxleaf = 0) {
             mov[esi + 12], edx
         }
     #endif
-#elif defined(__aarch64__) || defined(__arm__)
-    // Assume NEON support on ARM
-    output[0] = 1; // Indicating support for SSE
-    output[1] = 1; // Indicating support for SSE2
-    output[2] = (1 <<  0)|(1 <<  9)|(1 << 19)|(1 << 23)|(1 << 20); // Indicating support for SSE3
-    output[3] = (1 <<  0)|(1 << 23)|(1 << 15)|(1 << 24)|(1 << 25)|(1 << 26); // Indicating support for SSSE3, SSE4.1, SSE4.2
+#elif defined(__ARM_NEON__)
+    output[0] = 1;
+    output[1] = 1;
+    output[2] = (1 <<  0)|(1 <<  9)|(1 << 19)|(1 << 23)|(1 << 20);
+    output[3] = (1 <<  0)|(1 << 23)|(1 << 15)|(1 << 24)|(1 << 25)|(1 << 26);; // Indicating support forup to SSE4.2
 #else
     #error Unsupported platform
 #endif
