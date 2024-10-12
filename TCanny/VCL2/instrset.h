@@ -297,7 +297,7 @@ static inline void cpuid(int output[4], int functionnumber, int ecxleaf = 0) {
     output[0] = 1;
     output[1] = 1;
     output[2] = (1 <<  0)|(1 <<  9)|(1 << 19)|(1 << 23)|(1 << 20);
-    output[3] = (1 <<  0)|(1 << 23)|(1 << 15)|(1 << 24)|(1 << 25)|(1 << 26);; // Indicating support forup to SSE4.2
+    output[3] = (1 <<  0)|(1 << 23)|(1 << 15)|(1 << 24)|(1 << 25)|(1 << 26);; // Indicating support for up to SSE4.2
 #else
     #error Unsupported platform
 #endif
