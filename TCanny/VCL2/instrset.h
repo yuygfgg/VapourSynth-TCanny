@@ -20,7 +20,7 @@
 * Apache License version 2.0 or later.
 ******************************************************************************/
 
-#if __arm64
+#if __ARM_NEON__
 #include "sse2neon.h"
 
 // limit to 128byte, since we want to use ARM-neon
@@ -297,8 +297,8 @@ static inline void cpuid(int output[4], int functionnumber, int ecxleaf = 0) {
     // Assume NEON support on ARM
     output[0] = 1; // Indicating support for SSE
     output[1] = 1; // Indicating support for SSE2
-    output[2] = 1; // Indicating support for SSE3
-    output[3] = 1; // Indicating support for SSSE3, SSE4.1, SSE4.2
+    output[2] = (1 <<  0)|(1 <<  9)|(1 << 19)|(1 << 23)|(1 << 20); // Indicating support for SSE3
+    output[3] = (1 <<  0)|(1 << 23)|(1 << 15)|(1 << 24)|(1 << 25)|(1 << 26); // Indicating support for SSSE3, SSE4.1, SSE4.2
 #else
     #error Unsupported platform
 #endif
