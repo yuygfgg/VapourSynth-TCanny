@@ -10,7 +10,7 @@ cxx = meson.get_compiler('cpp')
 gcc_syntax = cxx.get_argument_syntax() == 'gcc'
 
 if get_option('buildtype') == 'release'
-  add_project_arguments(gcc_syntax ? ['-fno-math-errno', '-fno-trapping-math'] : '/GS-', language: 'cpp')
+  add_project_arguments(gcc_syntax ? ['-fno-math-errno', '-fno-trapping-math', '-march=native', '-mllvm' ,'-polly', '-mllvm', '-polly-vectorizer=stripmine', '-mllvm', '-polly-tiling', '-Rpass-analysis=polly'] : '/GS-', language: 'cpp')
 endif
 
 if gcc_syntax
